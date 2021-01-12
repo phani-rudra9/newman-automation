@@ -1,52 +1,12 @@
-version: 2.1
-
-orbs:
-  aws-ecr: circleci/aws-ecr@6.2.0
-  aws-ecs: circleci/aws-ecs@0.0.11   
-workflows:
-#Build project
-  build_app:
-  jobs:
-    build:
-      docker:
-          - image: circleci/node:10.7
-      steps:
-          - checkout
-          - restore_cache:
-              keys:
-                  - v1-dependencies-{{ checksum "package.json" }}
-                  - v1-dependencies-
-          - run:
-              name: Install dependencies
-              command: npm install
-          - save_cache:
-                key: v1-dependencies-{{ checksum "package.json" }}
-                paths:
-                    - node_modules
-          - run:
-              name: Run uploadslack.js
-              command: echo $AWS_ACCESS_KEY_ID
-
-# Log into AWS, build and push image to Amazon ECR
-  build_and_push_image:
-    jobs:
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          # Name of dockerfile to use. Defaults to Dockerfile.
-          dockerfile: Dockerfile
-          # AWS_REGION_ENV_VAR_NAME
-          region: AWS_DEFAULT_REGION
-          # myECRRepository
-          repo: '${MY_APP_PREFIX}'
-          # myECRRepoTag
-          tag: "newman-${CIRCLE_BUILD_NUM}"
-      # - aws-ecs/deploy-service-update:
-      #     requires:
-      #     - aws-ecr/build-and-push-image
-      #     aws-region: AWS_DEFAULT_REGION
-      #     family: '${MY_APP_PREFIX}-service'
-      #     cluster-name: '${MY_APP_PREFIX}-cluster'
-      #     container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'
+jobs:
+  build_deploy:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Installing AWS CLI
+          command: |
+            sudo apt-get update
+            sudo apt install python3-pip
+            echo $AWS_ACCESS_KEY_ID
