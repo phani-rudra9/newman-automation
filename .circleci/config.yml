@@ -1,14 +1,17 @@
 version: 2.1
-jobs:
-  build:
-    branches:
-      only:
-        - phani
+
 orbs:
   aws-ecr: circleci/aws-ecr@6.2.0
   aws-ecs: circleci/aws-ecs@0.0.11 
 
 workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: phani
 # Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
   build_and_push_image_deploy_ecs:
     jobs:
