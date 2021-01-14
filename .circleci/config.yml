@@ -8,24 +8,9 @@ workflows:
   build_app:
   jobs:
     build:
-      docker:
-          - image: circleci/node:10.7
-      steps:
-          - checkout
-          - restore_cache:
-              keys:
-                  - v1-dependencies-{{ checksum "package.json" }}
-                  - v1-dependencies-
-          - run:
-              name: Install dependencies
-              command: npm install
-          - save_cache:
-                key: v1-dependencies-{{ checksum "package.json" }}
-                paths:
-                    - node_modules
-          - run:
-              name: Run uploadslack.js
-              command: node reportToSlack.js
+      - run:
+          name: Run uploadslack.js
+          command: node reportToSlack.js
 
 # Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
   build_and_push_image_deploy_ecs:
