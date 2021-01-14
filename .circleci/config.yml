@@ -4,45 +4,46 @@ orbs:
   aws-ecr: circleci/aws-ecr@6.2.0
   aws-ecs: circleci/aws-ecs@0.0.11   
 workflows:
-# #Build project
-#   build_app:
-#   jobs:
-#     build:
-#       docker:
-#           - image: circleci/node:10.7
-#       steps:
-#           - checkout
-#           - restore_cache:
-#               keys:
-#                   - v1-dependencies-{{ checksum "package.json" }}
-#                   - v1-dependencies-
-#           - run:
-#               name: Install dependencies
-#               command: npm install
-#           - save_cache:
-#                 key: v1-dependencies-{{ checksum "package.json" }}
-#                 paths:
-#                     - node_modules
-#           - run:
-#               name: Run uploadslack.js
-#               command: node index.js
+#Build project
+  build_app:
+  jobs:
+    build:
+      docker:
+          - image: circleci/node:10.7
+      steps:
+          - checkout
+          - restore_cache:
+              keys:
+                  - v1-dependencies-{{ checksum "package.json" }}
+                  - v1-dependencies-
+          - run:
+              name: Install dependencies
+              command: npm install
+          - save_cache:
+                key: v1-dependencies-{{ checksum "package.json" }}
+                paths:
+                    - node_modules
+          - run:
+              name: Run uploadslack.js
+              command: node reportToSlack.js
 
-# Log into AWS, build and push image to Amazon ECR
-  build_and_push_image:
+# Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
+  build_and_push_image_deploy_ecs:
     jobs:
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           create-repo: true
-          dockerfile: Dockerfile
+          dockerfile: ./newman-automation/Dockerfile
           region: AWS_DEFAULT_REGION
           repo: '${MY_APP_PREFIX}'
-          tag: "varanewman-$CIRCLE_SHA1"
+          tag: "varanewman-${CIRCLE_SHA1}"
+# Deploy the new image to ecs cluster by updating the service with latest task definition 
       - aws-ecs/deploy-service-update:
           requires:
           - aws-ecr/build-and-push-image
           aws-region: AWS_DEFAULT_REGION
-          family: '${MY_APP_PREFIX}'
-          cluster-name: '${MY_APP_PREFIX}'
-          container-image-name-updates: 'container=${MY_APP_PREFIX},tag=varanewman-${CIRCLE_SHA1}'
+          family: '${MY_APP_PREFIX}-service'
+          cluster-name: '${MY_APP_PREFIX}-cluster'
+          container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=varanewman-${CIRCLE_SHA1}'
