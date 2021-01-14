@@ -5,13 +5,12 @@ orbs:
   aws-ecs: circleci/aws-ecs@0.0.11 
 
 workflows:
-  version: 2
   build-deploy:
     jobs:
-      - aws-ecr/build-and-push-image:
-                               filters:
-                                  branches:
-                                    only: phani
+      - build:
+          filters:
+            branches:
+              only: 
 # Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
   build_and_push_image_deploy_ecs:
     jobs:
