@@ -21,6 +21,6 @@ workflows:
           requires:
           - aws-ecr/build-and-push-image
           aws-region: AWS_DEFAULT_REGION
-          family: '${MY_APP_PREFIX}-service'
-          cluster-name: '${MY_APP_PREFIX}-cluster'
-          container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=varanewman-${CIRCLE_SHA1}'
+          family: '${MY_APP_PREFIX}'
+          cluster-name: '${MY_APP_PREFIX}'
+          container-image-name-updates: 'container=${MY_APP_PREFIX},tag=varanewman-${CIRCLE_SHA1}'
