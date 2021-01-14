@@ -2,8 +2,7 @@ version: 2.1
 jobs:
   build:
    - branches:
-       only:
-         - phani
+       only: phani
 orbs:
   aws-ecr: circleci/aws-ecr@6.2.0
   aws-ecs: circleci/aws-ecs@0.0.11 
