@@ -2,7 +2,12 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@6.2.0
-  aws-ecs: circleci/aws-ecs@0.0.11   
+  aws-ecs: circleci/aws-ecs@0.0.11 
+jobs:
+  build:
+    branches:
+      only:
+        - phani  
 workflows:
 # Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
   build_and_push_image_deploy_ecs:
@@ -11,7 +16,7 @@ workflows:
           account-url: AWS_ECR_ACCOUNT_URL
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
+          create-repo: false
           dockerfile: Dockerfile
           region: AWS_DEFAULT_REGION
           repo: '${MY_APP_PREFIX}'
