@@ -21,12 +21,13 @@ jobs:
       - run: docker build -t sample .
       - run: echo "Installing aws cli and pushing the image to aws ecr repo"
       - run: sudo chmod 777 -R  install_aws_cli.sh
-      # - run: sudo ./install_aws_cli.sh
       - run: aws configure set profile.default.region $AWS_DEFAULT_REGION
       - run: sudo echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
       - run: sudo echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
       - run: cat ~/.aws/credentials
-      - run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 971076122335.dkr.ecr.ap-south-1.amazonaws.com
+      - run: REPOSITORY_URI=971076122335.dkr.ecr.ap-south-1.amazonaws.com/sample
+      - run: DOCKER_LOGIN_PASSWORD=$(aws ecr get-login-password  --region ap-south-1)
+      - run: docker login -u AWS -p $DOCKER_LOGIN_PASSWORD https://971076122335.dkr.ecr.ap-south-1.amazonaws.com
       
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
