@@ -27,7 +27,7 @@ jobs:
       - run: sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
       - run: sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
       - run: cat ~/.aws/credentials
-      - run: ./ecr_login.sh
+      - run: sudo ./ecr_login.sh
       
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
