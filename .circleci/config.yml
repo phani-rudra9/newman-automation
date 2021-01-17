@@ -14,7 +14,9 @@ jobs:
       - image: ubuntu
     steps:
       - checkout
-      - run: docker build -t sample .
+      - run: apt-get update -y
+      - run: apt-get install -y docker.io
+      - run: docker build -t  sample .
   #     - run: ./scripts/ci/steps/prerelease.sh
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
