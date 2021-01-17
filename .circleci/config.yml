@@ -1,22 +1,75 @@
 version: 2.1
 jobs:
-  build:
+  test:
+    working_directory: ~/newman-automation
     docker:
-      - image: circleci/golang:1.15
-        # auth:
-        #   username: mydockerhub-user
-        #   password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+      - image: node
     steps:
       - checkout
-      # ... steps for building/testing app ...
+      - run: npm install
+      - run: npm test
+      - run: pwd
+      - run: ls
+  prerelease:
+    working_directory: ~/newman-automation
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      # - checkout
+      # - run: apt-get update -y
+      # - run: apt-get install -y docker.io || systemctl restart docker
+      - run: pwd
+      - run: ls
+      - run: docker build -t sample .
+  # release:
+  #   working_directory: ~/terraform-aws-ecs-cluster
+  #   docker:
+  #     - image: ruby:2.6.0
+  #   steps:
+  #     - checkout
+  #     - run: ./scripts/ci/common/install-git-crypt.sh
+  #     - run: ./scripts/ci/steps/release.sh
+orbs:
+  aws-ecr: circleci/aws-ecr@6.2.0
+  aws-ecs: circleci/aws-ecs@0.0.11 
+workflows:
+# Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
+  build_and_push_image_deploy_ecs:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: false
+          dockerfile: Dockerfile
+          region: AWS_DEFAULT_REGION
+          repo: '${MY_APP_PREFIX}'
+          tag: "varanewman-${CIRCLE_SHA1}"
 
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: true
-
-      # build and push Docker image
-      - run: |
-          TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
-          # echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          # docker push CircleCI-Public/circleci-demo-docker:$TAG
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: circleci-project-setup
+      - prerelease:
+          requires:
+            - test
+          filters:
+            branches:
+              only: circleci-project-setup
+      - hold:
+          type: approval
+          requires:
+            - prerelease
+          filters:
+            branches:
+              only: circleci-project-setup
+      # - release:
+      #     requires:
+      #       - hold
+      #     filters:
+      #       branches:
+      #         only: master
