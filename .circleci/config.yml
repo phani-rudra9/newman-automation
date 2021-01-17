@@ -17,8 +17,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update -y
-      # - run: yes | apt-get install systemd
-      - run: sudo apt-get install -y docker.io
+      - run: sudo service docker start
       - run: sudo service docker status 
       - run: pwd
       - run: ls
