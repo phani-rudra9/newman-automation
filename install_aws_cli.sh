@@ -1,22 +1,21 @@
 #!/bin/bash
 
-wget https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
-
 apt install unzip
 
-unzip awscli-bundle.zip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 
-sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+unzip awscliv2.zip
 
-./awscli-bundle/install -b ~/bin/aws
+sudo ./aws/install
 
-./awscli-bundle/install -h
-# aws configure
+aws
 
-# AWS Access Key ID [None]: aa
+aws configure
 
-# AWS Secret Access Key [None]: bb
+AWS Access Key ID [None]: aa
 
-# Default region name [None]: cc
+AWS Secret Access Key [None]: bb
 
-# Default output format [None]: json
+Default region name [None]: cc
+
+Default output format [None]: json
