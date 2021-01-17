@@ -1,59 +1,22 @@
 version: 2.1
 jobs:
-  test:
-    working_directory: ~/newman-automation
+  build:
     docker:
-      - image: node
+      - image: circleci/golang:1.15
+        # auth:
+        #   username: mydockerhub-user
+        #   password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - run: npm install
-      - run: npm test
-      - run: pwd
-      - run: ls
-  prerelease:
-    working_directory: ~/newman-automation
-    docker:
-      - image: cimg/base:2020.01
-    steps:
-      # - checkout
-      # - run: apt-get update -y
-      # - run: apt-get install -y docker.io || systemctl restart docker
-      - run: pwd
-      - run: ls
-      - run: docker build -t sample .
-  # release:
-  #   working_directory: ~/terraform-aws-ecs-cluster
-  #   docker:
-  #     - image: ruby:2.6.0
-  #   steps:
-  #     - checkout
-  #     - run: ./scripts/ci/common/install-git-crypt.sh
-  #     - run: ./scripts/ci/steps/release.sh
+      # ... steps for building/testing app ...
 
-workflows:
-  version: 2
-  pipeline:
-    jobs:
-      - test:
-          filters:
-            branches:
-              only: circleci-project-setup
-      - prerelease:
-          requires:
-            - test
-          filters:
-            branches:
-              only: circleci-project-setup
-      - hold:
-          type: approval
-          requires:
-            - prerelease
-          filters:
-            branches:
-              only: circleci-project-setup
-      # - release:
-      #     requires:
-      #       - hold
-      #     filters:
-      #       branches:
-      #         only: master
+      - setup_remote_docker:
+          version: 19.03.13
+          docker_layer_caching: true
+
+      # build and push Docker image
+      - run: |
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
+          # echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          # docker push CircleCI-Public/circleci-demo-docker:$TAG
