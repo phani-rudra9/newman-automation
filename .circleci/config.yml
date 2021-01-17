@@ -22,6 +22,7 @@ jobs:
       # - run: systemctl status docker
       # - run: pwd
       # - run: ls
+      - run: systemctl status docker
       - run: docker build -t sample .
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
