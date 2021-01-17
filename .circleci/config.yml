@@ -16,13 +16,12 @@ jobs:
       - image: ubuntu:21.04
     steps:
       - checkout
-      - run: apt-get update -y
+      - run: sudo apt-get update -y
       # - run: yes | apt-get install systemd
-      - run: apt-get install -y docker.io
-      - run: service docker status 
+      - run: sudo apt-get install -y docker.io
+      - run: sudo service docker status 
       - run: pwd
       - run: ls
-      - run: systemctl status docker
       - run: docker build -t sample .
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
