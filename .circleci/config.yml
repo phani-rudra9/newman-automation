@@ -12,8 +12,8 @@ jobs:
       - run: ls
   prerelease:
     working_directory: ~/newman-automation
-    docker:
-      - image: ubuntu:21.04
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run: sudo apt-get update -y
@@ -22,6 +22,7 @@ jobs:
       - run: sudo service docker status 
       - run: pwd
       - run: ls
+      - run: systemctl status docker
       - run: docker build -t sample .
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
