@@ -18,6 +18,8 @@ jobs:
       # - checkout
       # - run: apt-get update -y
       # - run: apt-get install -y docker.io || systemctl restart docker
+      - run: pwd
+      - run: ls
       - run: docker build -t sample .
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
