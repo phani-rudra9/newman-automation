@@ -18,6 +18,7 @@ jobs:
       - checkout
       - run: apt-get update -y
       - run: apt-get install -y docker.io || systemctl restart docker.service
+      - run: systemctl status docker
       - run: pwd
       - run: ls
       - run: docker build -t sample .
