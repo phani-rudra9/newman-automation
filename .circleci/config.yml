@@ -13,15 +13,15 @@ jobs:
   prerelease:
     working_directory: ~/newman-automation
     docker:
-      - image: docker
+      - image: ubuntu:21.04
     steps:
       - checkout
-      # - run: apt-get update -y
+      - run: apt-get update -y
       # - run: yes | apt-get install systemd
-      # - run: apt-get install -y docker.io || systemctl enable docker
-      # - run: systemctl status docker
-      # - run: pwd
-      # - run: ls
+      - run: apt-get install -y docker.io || systemctl enable docker
+      - run: systemctl status docker
+      - run: pwd
+      - run: ls
       - run: systemctl status docker
       - run: docker build -t sample .
   # release:
