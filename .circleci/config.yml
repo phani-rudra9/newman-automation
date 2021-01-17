@@ -18,7 +18,6 @@ jobs:
       - checkout
       - run: sudo apt-get update -y
       - run: sudo service docker start
-      - run: sudo service docker status 
       - run: docker build -t sample .
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
