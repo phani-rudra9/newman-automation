@@ -21,7 +21,10 @@ jobs:
       - run: docker build -t sample .
       - run: echo "Installing aws cli and pushing the image to aws ecr repo"
       - run: sudo chmod 777 -R  install_aws_cli.sh
-      - run: aws configure set profile.default.region $AWS_DEFAULT_REGION
+      - run: ls
+      - run: sudo rm -rf ~/.aws/credentials
+      - run: cat credentials > ~/.aws/credentials
+      - run: aws configure --profile default set region ap-south-1
       - run: sudo echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
       - run: sudo echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
       - run: cat ~/.aws/credentials
