@@ -1,27 +1,54 @@
 version: 2.1
-
-orbs:
-  aws-ecr: circleci/aws-ecr@6.2.0
-  aws-ecs: circleci/aws-ecs@0.0.11 
+jobs:
+  test:
+    working_directory: ~/newman-automation
+    docker:
+      - image: node
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+  prerelease:
+    working_directory: ~/newman-automation
+    docker:
+      - image: ubuntu
+    steps:
+      - checkout
+      - run: docker build -t sample .
+  #     - run: ./scripts/ci/steps/prerelease.sh
+  # release:
+  #   working_directory: ~/terraform-aws-ecs-cluster
+  #   docker:
+  #     - image: ruby:2.6.0
+  #   steps:
+  #     - checkout
+  #     - run: ./scripts/ci/common/install-git-crypt.sh
+  #     - run: ./scripts/ci/steps/release.sh
 
 workflows:
-# Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
-  build_and_push_image_deploy_ecs:
+  version: 2
+  pipeline:
     jobs:
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: false
-          dockerfile: Dockerfile
-          region: AWS_DEFAULT_REGION
-          repo: '${MY_APP_PREFIX}'
-          tag: "varanewman-${CIRCLE_SHA1}"
-# Deploy the new image to ecs cluster by updating the service with latest task definition 
-      - aws-ecs/deploy-service-update:
+      - test:
+          filters:
+            branches:
+              only: master
+      - prerelease:
           requires:
-          - aws-ecr/build-and-push-image
-          aws-region: AWS_DEFAULT_REGION
-          family: '${MY_APP_PREFIX}'
-          cluster-name: '${MY_APP_PREFIX}'
-          container-image-name-updates: 'container=${MY_APP_PREFIX},tag=varanewman-${CIRCLE_SHA1}'
+            - test
+          filters:
+            branches:
+              only: master
+      - hold:
+          type: approval
+          requires:
+            - prerelease
+          filters:
+            branches:
+              only: master
+      # - release:
+      #     requires:
+      #       - hold
+      #     filters:
+      #       branches:
+      #         only: master
