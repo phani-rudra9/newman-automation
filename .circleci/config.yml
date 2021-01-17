@@ -17,6 +17,7 @@ jobs:
     steps:
       - checkout
       - run: apt-get update -y
+      - run: apt-get install -y docker.io
       - run: pwd
       - run: ls
       - run: docker build -t sample .
