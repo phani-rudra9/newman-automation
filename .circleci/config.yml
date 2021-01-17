@@ -18,8 +18,8 @@ jobs:
       - checkout
       - run: apt-get update -y
       # - run: yes | apt-get install systemd
-      - run: apt-get install -y docker.io || systemctl enable docker
-      - run: systemctl status docker
+      - run: apt-get install -y docker.io
+      - run: service docker status 
       - run: pwd
       - run: ls
       - run: systemctl status docker
