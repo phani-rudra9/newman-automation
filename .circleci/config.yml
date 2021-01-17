@@ -21,7 +21,7 @@ jobs:
       - run: docker build -t sample .
       - run: echo "Installing aws cli and pushing the image to aws ecr repo"
       - run: chmod 777 -R  install_aws_cli.sh
-      - run: ./install_aws_cli.sh AWS_ACCESS_KEY_ID	 AWS_SECRET_ACCESS_KEY	AWS_DEFAULT_REGION	
+      - run: ./install_aws_cli.sh $AWS_ACCESS_KEY_ID	 $AWS_SECRET_ACCESS_KEY	$AWS_DEFAULT_REGION	
       - run: cd ~
       - run: cd .aws 
       - run: ls
