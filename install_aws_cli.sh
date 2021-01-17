@@ -20,4 +20,3 @@ sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 # Default region name [None]: cc
 
 # Default output format [None]: json
-aws --help
