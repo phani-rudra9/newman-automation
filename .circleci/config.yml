@@ -13,11 +13,10 @@ jobs:
   prerelease:
     working_directory: ~/newman-automation
     docker:
-      - image: cimg/base:2020.01
+      - image: ubuntu
     steps:
-      # - checkout
-      # - run: apt-get update -y
-      # - run: apt-get install -y docker.io || systemctl restart docker
+      - checkout
+      - run: apt-get update -y
       - run: pwd
       - run: ls
       - run: docker build -t sample .
@@ -29,22 +28,6 @@ jobs:
   #     - checkout
   #     - run: ./scripts/ci/common/install-git-crypt.sh
   #     - run: ./scripts/ci/steps/release.sh
-orbs:
-  aws-ecr: circleci/aws-ecr@6.2.0
-  aws-ecs: circleci/aws-ecs@0.0.11 
-workflows:
-# Log into AWS, build ,tag with last commit-id and push image to Amazon ECR 
-  build_and_push_image_deploy_ecs:
-    jobs:
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: false
-          dockerfile: Dockerfile
-          region: AWS_DEFAULT_REGION
-          repo: '${MY_APP_PREFIX}'
-          tag: "varanewman-${CIRCLE_SHA1}"
 
 workflows:
   version: 2
