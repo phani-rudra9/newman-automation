@@ -11,22 +11,16 @@ jobs:
       - run: pwd
       - run: ls
   prerelease:
-    working_directory: ~/newman-automation 
-    build:
-     machine: true
-     steps:
-      - checkout
-      # start proprietary DB using private Docker image
-      # with credentials stored in the UI
-      # - run: |
-      #     echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      #     docker run -d --name db company/proprietary-db:1.2.3
-
-      # build the application image
-      - run: docker build -t company/app:$CIRCLE_BRANCH .
-
-      # # deploy the image
-      # - run: docker push company/app:$CIRCLE_BRANCH
+    working_directory: ~/newman-automation
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      # - checkout
+      # - run: apt-get update -y
+      # - run: apt-get install -y docker.io || systemctl restart docker
+      - run: pwd
+      - run: ls
+      - run: docker build -t sample .
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
   #   docker:
