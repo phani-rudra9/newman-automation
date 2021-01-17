@@ -22,6 +22,7 @@ jobs:
       - run: echo "Installing aws cli and pushing the image to aws ecr repo"
       - run: sudo chmod 777 -R  install_aws_cli.sh
       - run: sudo ./install_aws_cli.sh
+      - run: aws configure --profile default set region ap-south-1
       - run: sudo echo "export aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
       - run: cat ~/.aws/credentials
       - run: echo $access_key
