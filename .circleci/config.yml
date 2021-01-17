@@ -11,11 +11,11 @@ jobs:
   prerelease:
     working_directory: ~/newman-automation
     docker:
-      - image: ubuntu
+      - image: docker
     steps:
       - checkout
-      - run: apt-get update -y
-      - run: apt-get install -y docker.io || systemctl restart docker
+#       - run: apt-get update -y
+#       - run: apt-get install -y docker.io || systemctl restart docker
       - run: docker build -t  sample .
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
