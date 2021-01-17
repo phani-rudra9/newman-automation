@@ -14,10 +14,10 @@ sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
 aws configure
 
-AWS Access Key ID [None]: $1
+AWS Access Key ID [None]: $2
 
-AWS Secret Access Key [None]: $2 
+AWS Secret Access Key [None]: $3 
 
-Default region name [None]: $3 
+Default region name [None]: $4
 
 Default output format [None]: json
