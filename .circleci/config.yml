@@ -30,7 +30,7 @@ jobs:
       - run: REPOSITORY_URI=971076122335.dkr.ecr.ap-south-1.amazonaws.com/sample
       - run: DOCKER_LOGIN_PASSWORD=$(aws ecr get-login-password  --region ap-south-1)
       - run: echo $DOCKER_LOGIN_PASSWORD
-      - run: docker login -u AWS -p $DOCKER_LOGIN_PASSWORD https://971076122335.dkr.ecr.ap-south-1.amazonaws.com
+      - run: docker login -u AWS --password-stdin $DOCKER_LOGIN_PASSWORD https://971076122335.dkr.ecr.ap-south-1.amazonaws.com
       
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
