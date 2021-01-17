@@ -32,20 +32,20 @@ workflows:
       - test:
           filters:
             branches:
-              only: master
+              only: circleci-project-setup
       - prerelease:
           requires:
             - test
           filters:
             branches:
-              only: master
+              only: circleci-project-setup
       - hold:
           type: approval
           requires:
             - prerelease
           filters:
             branches:
-              only: master
+              only: circleci-project-setup
       # - release:
       #     requires:
       #       - hold
