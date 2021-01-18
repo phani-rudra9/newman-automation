@@ -38,8 +38,8 @@ jobs:
       - run:
           name: Build and Tag Image
           command: |
-            docker build -t $REPOSITORY_URI:newman-${CIRCLE_SHA1} .
-            docker push $REPOSITORY_URI:neman-$CIRCLE_SHA1
+            sudo docker build -t $REPOSITORY_URI:NEW-${CIRCLE_SHA1} .
+            sudo docker push $REPOSITORY_URI:NEW-${CIRCLE_SHA1}
       
       
   # release:
