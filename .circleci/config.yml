@@ -7,26 +7,27 @@ jobs:
     steps:
       - checkout
       - run: npm install
-      - run: npm test
-      - run: pwd
-      - run: ls
+      - run: node reportToSlack.js
   prerelease:
     working_directory: ~/newman-automation
     machine:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
-      - run: sudo apt-get update -y
-      - run: sudo service docker start
-      - run: docker build -t sample .
-      - run: echo "Installing aws cli and pushing the image to aws ecr repo"
-      - run: sudo chmod 777 -R  install_aws_cli.sh
-      - run: ls
-      - run: aws configure --profile default set region ap-south-1
-      - run: cat credentials  >  ~/.aws/credentials
-      - run: sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-      - run: sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-      - run: cat ~/.aws/credentials
+      - run:
+          name: Installing awscli & Setting up profile
+          command: |
+            sudo  chmod +x install_aws_cli.sh
+            aws configure --profile default set region ap-south-1
+            cat credentials  >  ~/.aws/credentials
+            sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+            sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+            cat ~/.aws/credentials
+      - run:
+          name: Updating and starting dokcer
+          command: |
+            sudo apt-get update -y
+            sudo service docker start         
       - run:
           name: Login to AWS ECR repo
           command: |
@@ -34,6 +35,12 @@ jobs:
             DOCKER_LOGIN_PASSWORD=$(aws ecr get-login-password  --region ap-south-1)
             echo $DOCKER_LOGIN_PASSWORD
             docker login -u AWS -p  $DOCKER_LOGIN_PASSWORD https://971076122335.dkr.ecr.ap-south-1.amazonaws.com
+      - run:
+          name: Build and Tag Image
+          command: |
+            docker build -t $REPOSITORY_URI:neman-$CIRCLE_SHA1
+            docker push $REPOSITORY_URI:neman-$CIRCLE_SHA1
+      
       
   # release:
   #   working_directory: ~/terraform-aws-ecs-cluster
