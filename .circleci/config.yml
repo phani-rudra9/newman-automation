@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Build and Tag Image
           command: |
-            docker build -t $REPOSITORY_URI:neman-$CIRCLE_SHA1
+            docker build -t $REPOSITORY_URI:neman-$CIRCLE_SHA1 .
             docker push $REPOSITORY_URI:neman-$CIRCLE_SHA1
       
       
