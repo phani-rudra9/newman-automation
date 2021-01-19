@@ -10,8 +10,8 @@ jobs:
       - run:
           name: setting up profile for terraform
           command: |
-            sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> providers.tf
-            sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> providers.tf
+            sudo echo 'access_key = "$AWS_ACCESS_KEY_ID"' >> providers.tf
+            sudo echo 'secret_key = "$AWS_SECRET_ACCESS_KEY"'>> providers.tf
             cat providers.tf
       - run:
           name: Installing terraform setting up profile for terraform
