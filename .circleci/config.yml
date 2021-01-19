@@ -1,13 +1,16 @@
 version: 2.1
 jobs:
   test:
-    working_directory: ~/newman-automation
+    working_directory: ~/newman-automation/terraform/ecr
     docker:
-      - image: node
+      - image: ubuntu-2004:202010-01
     steps:
       - checkout
-      - run: npm install
-      - run: node reportToSlack.js
+      - run:
+          name: Installing terraform
+          command: |
+            
+            
   prerelease:
     working_directory: ~/newman-automation
     machine:
@@ -15,9 +18,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Installing awscli & Setting up profile
+          name: Setting up profile
           command: |
-            sudo  chmod +x install_aws_cli.sh
             aws configure --profile default set region ap-south-1
             cat credentials > ~/.aws/credentials
             sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
