@@ -1,7 +1,7 @@
 version: 2.1
 jobs:
   test:
-    working_directory: ~/newman-automation/terraform/ecr
+    working_directory: ~/newman-automation
     machine:
       image: ubuntu-2004:202010-01
     steps:
