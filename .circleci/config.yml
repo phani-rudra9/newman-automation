@@ -11,8 +11,8 @@ jobs:
           command: |
             pwd
             ls
-            ./terraform/ecr/install_terraform.sh
-            ./terraform/ecr/terraform init
+            sudo ./terraform/ecr/install_terraform.sh
+            sudo ./terraform/ecr/terraform init
   prerelease:
     working_directory: ~/newman-automation
     machine:
