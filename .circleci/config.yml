@@ -25,8 +25,11 @@ jobs:
             sudo terraform init
             sudo terraform plan --out=ecr-out.json
             sudo terraform apply --auto-approve
-            sudo terraform output | awk {'print $4'} > ecr-repo-url.txt
-            cat ecr-repo-url.txt
+            sudo terraform output > /home/ubuntu/ecr-repo-url.txt
+            cat /home/ubuntu/ecr-repo-url.txt
+      - store_artifacts:
+          path: /home/ubuntu/ecr-repo-url.txt
+          destination: ecr-repo-url.txt
   prerelease:
     working_directory: ~/newman-automation
     machine:
