@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/newman-automation/terraform/ecr
     machine:
-      image: ubuntu:18.04
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
