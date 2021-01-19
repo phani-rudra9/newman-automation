@@ -9,8 +9,8 @@ jobs:
       - run:
           name: Installing terraform
           command: |
-            
-            
+            ./install_terraform.sh
+            terraform init
   prerelease:
     working_directory: ~/newman-automation
     machine:
