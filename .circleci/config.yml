@@ -15,6 +15,10 @@ jobs:
             sudo chmod +x install_terraform.sh
             sudo sh install_terraform.sh
             sudo terraform init
+            sudo terraform plan --out=ecr-out.json
+            sudo terraform apply --auto-approve
+            sudo terraform output | awk {'print $4'} > ecr-repo-url.txt
+            cat ecr-repo-url.txt
   prerelease:
     working_directory: ~/newman-automation
     machine:
