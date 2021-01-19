@@ -2,8 +2,8 @@ version: 2.1
 jobs:
   test:
     working_directory: ~/newman-automation/terraform/ecr
-    docker:
-      - image: ubuntu-2004:202010-01
+    machine:
+      image: ubuntu:18.04
     steps:
       - checkout
       - run:
