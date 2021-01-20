@@ -25,9 +25,9 @@ jobs:
             sudo terraform init
             sudo terraform plan --out=ecr-out.json
             sudo terraform apply --auto-approve
-            sudo terraform output > /home/ubuntu/ecr-repo-url.txt
+            sudo terraform output > ecr-repo-url.txt
       - store_artifacts:
-          path: /home/ubuntu/ecr-repo-url.txt
+          path: ecr-repo-url.txt
           destination: ecr-repo-url.txt
   dockerbuild_ecrpush:
     working_directory: ~/newman-automation/terraform/ecs-task-service
@@ -57,14 +57,14 @@ jobs:
             docker build -t $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1} .
             docker push $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1}
                  
-  # release:
-  #   working_directory: ~/terraform-aws-ecs-cluster
-  #   docker:
-  #     - image: ruby:2.6.0
-  #   steps:
-  #     - checkout
-  #     - run: ./scripts/ci/common/install-git-crypt.sh
-  #     - run: ./scripts/ci/steps/release.sh
+  release:
+    working_directory: ~/newman-automation/terraform/ecs-task-service
+    docker:
+      - image: ruby:2.6.0
+    steps:
+      - checkout
+      - run: ./scripts/ci/common/install-git-crypt.sh
+      - run: ./scripts/ci/steps/release.sh
 
 workflows:
   version: 2
