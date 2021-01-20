@@ -7,7 +7,9 @@ const upload = require('./upload.js');
 const newman = require('newman');
 
 const SlackWebhook = require('slack-webhook');
-const slack = new SlackWebhook(process.env.SLACK_WEBHOOK_KEY);
+console.log("[ENV]",process.env);
+const webhookUrl = "https://hooks.slack.com/services/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";
+const slack = new SlackWebhook(webhookurl);
 let title
 let stats
 
