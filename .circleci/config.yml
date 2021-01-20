@@ -29,6 +29,10 @@ jobs:
             sudo terraform plan --out=ecr-out.json
             sudo terraform apply --auto-approve
             sudo terraform output > ecr-repo-url.txt
+      - persist_to_workspace:
+           root: .
+           paths:
+             - .
       - store_artifacts:
           path: ecr-repo-url.txt
           destination: ecr-repo-url.txt
