@@ -70,13 +70,13 @@ workflows:
   version: 2
   pipeline:
     jobs:
-      - terraform-ecr:
-          filters:
-            branches:
-              only: circleci-project-setup
+#       - terraform-ecr:
+#           filters:
+#             branches:
+#               only: circleci-project-setup
       - dockerbuild_ecrpush:
-          requires:
-            - terraform-ecr
+#           requires:
+#             - terraform-ecr
           filters:
             branches:
               only: circleci-project-setup
