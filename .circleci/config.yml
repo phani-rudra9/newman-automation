@@ -16,7 +16,7 @@ jobs:
             aws configure --profile vara set region ap-south-1
             cat credentials > ~/.aws/credentials
             sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-            sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY_ID" >> ~/.aws/credentials
+            sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
             sudo cp -R ~/.aws/credentials /home/ubuntu/
             cat /home/ubuntu/credentials
             cat ~/.aws/credentials
@@ -33,7 +33,7 @@ jobs:
           path: ecr-repo-url.txt
           destination: ecr-repo-url.txt
   dockerbuild_ecrpush:
-    working_directory: ~/newman-automation/terraform/ecs-task-service
+    working_directory: ~/newman-automation
     machine:
       image: ubuntu-2004:202010-01
     steps:
@@ -41,10 +41,11 @@ jobs:
       - run:
           name: Setting up profile
           command: |
+            ls
             aws configure --profile default set region ap-south-1
             cat credentials > ~/.aws/credentials
             sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-            sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY_ID" >> ~/.aws/credentials
+            sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
             cat ~/.aws/credentials
       - run:
           name: Updating and starting docker
@@ -60,14 +61,14 @@ jobs:
             docker build -t $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1} .
             docker push $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1}
                  
-  release:
-    working_directory: ~/newman-automation/terraform/ecs-task-service
-    docker:
-      - image: ruby:2.6.0
-    steps:
-      - checkout
-      - run: ./scripts/ci/common/install-git-crypt.sh
-      - run: ./scripts/ci/steps/release.sh
+  # release:
+  #   working_directory: ~/newman-automation/terraform/ecs-task-service
+  #   docker:
+  #     - image: ruby:2.6.0
+  #   steps:
+  #     - checkout
+  #     - run: ./scripts/ci/common/install-git-crypt.sh
+  #     - run: ./scripts/ci/steps/release.sh
 
 workflows:
   version: 2
