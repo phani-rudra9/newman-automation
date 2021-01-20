@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  test:
+  terraform-ecr:
     working_directory: ~/newman-automation/terraform/ecr
     machine:
       image: ubuntu-2004:202010-01
@@ -26,12 +26,11 @@ jobs:
             sudo terraform plan --out=ecr-out.json
             sudo terraform apply --auto-approve
             sudo terraform output > /home/ubuntu/ecr-repo-url.txt
-            cat /home/ubuntu/ecr-repo-url.txt
       - store_artifacts:
           path: /home/ubuntu/ecr-repo-url.txt
           destination: ecr-repo-url.txt
-  prerelease:
-    working_directory: ~/newman-automation
+  dockerbuild_ecrpush:
+    working_directory: ~/newman-automation/terraform/ecs-task-service
     machine:
       image: ubuntu-2004:202010-01
     steps:
@@ -45,7 +44,7 @@ jobs:
             sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
             cat ~/.aws/credentials
       - run:
-          name: Updating and starting dokcer
+          name: Updating and starting docker
           command: |
             sudo apt-get update -y
             sudo service docker start         
@@ -71,20 +70,20 @@ workflows:
   version: 2
   pipeline:
     jobs:
-      - test:
+      - terraform-ecr:
           filters:
             branches:
               only: circleci-project-setup
-      - prerelease:
+      - dockerbuild_ecrpush:
           requires:
-            - test
+            - terraform-ecr
           filters:
             branches:
               only: circleci-project-setup
       - hold:
           type: approval
           requires:
-            - prerelease
+            - dockerbuild_ecrpush
           filters:
             branches:
               only: circleci-project-setup
