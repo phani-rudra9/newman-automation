@@ -17,18 +17,18 @@ jobs:
 #             sudo cp -R ~/.aws/credentials /home/ubuntu/
 #             cat /home/ubuntu/credentials
 #             cat ~/.aws/credentials
-      - run:
-          name: Installing terraform setting up profile for terraform
-          command: |
-            sudo chmod +x install_terraform.sh
-            sudo sh install_terraform.sh
-            sudo terraform init
-            sudo terraform plan --out=ecr-out.json
-            sudo terraform apply --auto-approve
-            sudo terraform output > ecr-repo-url.txt
-      - store_artifacts:
-          path: ecr-repo-url.txt
-          destination: ecr-repo-url.txt
+#       - run:
+#           name: Installing terraform setting up profile for terraform
+#           command: |
+#             sudo chmod +x install_terraform.sh
+#             sudo sh install_terraform.sh
+#             sudo terraform init
+#             sudo terraform plan --out=ecr-out.json
+#             sudo terraform apply --auto-approve
+#             sudo terraform output > ecr-repo-url.txt
+#       - store_artifacts:
+#           path: ecr-repo-url.txt
+#           destination: ecr-repo-url.txt
   dockerbuild_ecrpush:
     working_directory: ~/newman-automation/terraform/ecs-task-service
     machine:
