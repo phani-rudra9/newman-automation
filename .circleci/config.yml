@@ -25,7 +25,7 @@ jobs:
           command: |
             sudo chmod +x install_terraform.sh
             sudo sh install_terraform.sh
-            sudo terraform init
+            sudo terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
             sudo terraform plan --out=ecr-out.json
             sudo terraform apply --auto-approve
             sudo terraform output > ecr-repo-url.txt
