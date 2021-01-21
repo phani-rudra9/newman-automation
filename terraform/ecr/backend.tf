@@ -1,7 +1,9 @@
 terraform {
-  backend "s3" {
-    bucket = "sampleaspdotnetcore"
-    key    = "terra/terraform.tfstate"
-    region = "ap-south-1"
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "phani-terra"
+    workspaces {
+      name = "my-app-sample"
+    }
   }
 }

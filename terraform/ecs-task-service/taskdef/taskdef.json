@@ -7,7 +7,7 @@
         "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-            "awslogs-group": "newman-terra",
+            "awslogs-group": "newman-log",
             "awslogs-region": "ap-south-1",
             "awslogs-stream-prefix": "ecs"
           }

@@ -1,6 +1,7 @@
 resource "aws_cloudwatch_log_group" "log_group" {
-  name = "newman-terra"
+  name = var.log_group_name
     tags = {
-    Environment = "dev"
+      created_by = var.created_by
+      Environment = var.environment
   }
 }

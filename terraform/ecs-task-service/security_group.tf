@@ -19,6 +19,8 @@ resource "aws_security_group" "allow_http" {
   }
 
   tags = {
-    Name = "allow_tls"
+    Name = "allow_http"
+    created_by = var.created_by
+    Environment = var.environment
   }
 }
