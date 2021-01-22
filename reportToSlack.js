@@ -8,7 +8,7 @@ const newman = require('newman');
 
 const SlackWebhook = require('slack-webhook');
 console.log("[ENV]",process.env);
-const webhookUrl = "https://hooks.slack.com/services/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";
+const webhookUrl = "https://hooks.slack.com/services/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";
 const slack = new SlackWebhook(webhookUrl);
 let title
 let stats
