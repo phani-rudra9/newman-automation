@@ -60,6 +60,7 @@ jobs:
             docker login -u AWS -p  $DOCKER_LOGIN_PASSWORD https://971076122335.dkr.ecr.ap-south-1.amazonaws.com
             sudo echo "AWS_ACESS_KEY=$AWS_ACCESS_KEY_ID" >> .env
             sudo echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env
+            sudo echo "SLACK_WEBHOOK_KEY=$SLACK_URL" >> .env
             docker build -t $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1} .
             docker push $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1}
                  
