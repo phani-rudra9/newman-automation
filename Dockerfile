@@ -8,6 +8,8 @@ WORKDIR /app
 # where available (npm@5+)
 COPY package*.json ./
 
+RUN npm install dotenv
+
 RUN npm install
 
 # Bundle app source
