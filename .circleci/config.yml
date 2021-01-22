@@ -11,28 +11,28 @@ jobs:
           name: setting up profile for terraform
           command: |
             aws configure --profile vara set region ap-south-1
-            cat credentials > ~/.aws/credentials
-            sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-            sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-            sudo cp -R ~/.aws/credentials /home/ubuntu/
-            cat /home/ubuntu/credentials
-            cat ~/.aws/credentials
-      - run:
-          name: Installing terraform setting up profile for terraform
-          command: |
-            sudo chmod +x install_terraform.sh
-            sudo sh install_terraform.sh
-            sudo  terraform init  -backend-config="hostname=app.terraform.io"  -backend-config="organization=phani-terra" -backend-config="token=q9zgzMePP7Pgvw.atlasv1.0Cani8pm0Q9df4oC5xPoRgV8RgeJOvYVZXkVXszO8pnt6059BlRzsQKcqipz4wIoYyM"
-            sudo terraform plan --out=ecr-out.json
-            sudo terraform apply --auto-approve
-            sudo terraform output > ecr-repo-url.txt
-      - persist_to_workspace:
-           root: .
-           paths:
-             - .
-      - store_artifacts:
-          path: ecr-repo-url.txt
-          destination: ecr-repo-url.txt
+      #       cat credentials > ~/.aws/credentials
+      #       sudo echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+      #       sudo echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+      #       sudo cp -R ~/.aws/credentials /home/ubuntu/
+      #       cat /home/ubuntu/credentials
+      #       cat ~/.aws/credentials
+      # - run:
+      #     name: Installing terraform setting up profile for terraform
+      #     command: |
+      #       sudo chmod +x install_terraform.sh
+      #       sudo sh install_terraform.sh
+      #       sudo terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
+      #       sudo terraform plan --out=ecr-out.json
+      #       sudo terraform apply --auto-approve
+      #       sudo terraform output > ecr-repo-url.txt
+      # - persist_to_workspace:
+      #      root: .
+      #      paths:
+      #        - .
+      # - store_artifacts:
+      #     path: ecr-repo-url.txt
+      #     destination: ecr-repo-url.txt
   dockerbuild_ecrpush:
     working_directory: ~/newman-automation
     machine:
@@ -58,6 +58,8 @@ jobs:
             DOCKER_LOGIN_PASSWORD=$(aws ecr get-login-password  --region ap-south-1)
             echo $DOCKER_LOGIN_PASSWORD
             docker login -u AWS -p  $DOCKER_LOGIN_PASSWORD https://971076122335.dkr.ecr.ap-south-1.amazonaws.com
+            sudo echo "AWS_ACESS_KEY=$AWS_ACCESS_KEY_ID" >> .env
+            sudo echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env
             docker build -t $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1} .
             docker push $AWS_ECR_ACCOUNT_URL:NEW-${CIRCLE_SHA1}
                  
